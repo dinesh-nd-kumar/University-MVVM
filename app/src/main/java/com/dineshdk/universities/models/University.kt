@@ -1,4 +1,4 @@
-package com.dineshdk.universities
+package com.dineshdk.universities.models
 
 import com.google.gson.annotations.SerializedName
 

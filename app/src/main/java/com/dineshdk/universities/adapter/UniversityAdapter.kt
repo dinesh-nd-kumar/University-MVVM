@@ -1,4 +1,4 @@
-package com.dineshdk.universities
+package com.dineshdk.universities.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.dineshdk.universities.databinding.RowItemBinding
+import com.dineshdk.universities.models.University
 
 class UniversityAdapter(val context: Context, var universityList: List<University>?)
     : RecyclerView.Adapter<UniversityAdapter.UniversityViewHolder>() {
@@ -39,7 +40,7 @@ class UniversityAdapter(val context: Context, var universityList: List<Universit
         fun bindData(univ : University){
             binding.apply {
                 name.text = univ?.name
-                tvAddress.text = "${univ?.stateProvince} ${univ?.country}"
+                tvAddress.text = "${univ?.stateProvince ?: ""} ${univ?.country}"
                 url = univ.webPages[0]
                 root.setOnClickListener(this@UniversityViewHolder)
                 imageButton.setOnClickListener(this@UniversityViewHolder)

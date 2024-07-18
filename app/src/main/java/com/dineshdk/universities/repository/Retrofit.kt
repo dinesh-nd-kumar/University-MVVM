@@ -1,12 +1,11 @@
-package com.dineshdk.universities
+package com.dineshdk.universities.repository
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 object Retrofit {
 
-    val api:UniversityApi by lazy {
+    val api: UniversityApi by lazy {
         Retrofit.Builder().baseUrl("http://universities.hipolabs.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()

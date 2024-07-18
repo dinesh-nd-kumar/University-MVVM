@@ -1,21 +1,20 @@
 package com.dineshdk.universities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dineshdk.universities.adapter.UniversityAdapter
 import com.dineshdk.universities.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
+import com.dineshdk.universities.models.ViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
     private lateinit var universityAdapter: UniversityAdapter
+    private lateinit var mViewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,16 +22,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setRecycler()
 
-
-        lifecycleScope.launch {
-            binding.progressBar.isVisible = true
-            val responce = Retrofit.api.getUniversityList()
-            universityAdapter.universityList = responce.body()!!
+        mViewModel = ViewModelProvider(this).get(ViewModel::class.java)
+        binding.progressBar.visibility = View.VISIBLE
+        mViewModel.getData("india")
+            mViewModel.observeUnivLiveData().observe(this){
+            universityAdapter.universityList =it
             universityAdapter.notifyDataSetChanged()
-            binding.progressBar.isVisible = false
+                binding.progressBar.visibility = View.GONE
+
         }
-
-
 
     }
 
