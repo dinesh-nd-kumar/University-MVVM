@@ -9,6 +9,7 @@
 
     <SearchView
         android:id="@+id/serchview"
+        android:queryHint="country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"/>
