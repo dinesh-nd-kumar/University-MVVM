@@ -2,6 +2,7 @@ package com.dineshdk.universities
 
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dineshdk.universities.adapter.UniversityAdapter
 import com.dineshdk.universities.databinding.ActivityMainBinding
 import com.dineshdk.universities.models.ViewModel
+import com.dineshdk.universities.others.Constant.DEFAULT_COUNTRY
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,13 +26,30 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel = ViewModelProvider(this).get(ViewModel::class.java)
         binding.progressBar.visibility = View.VISIBLE
-        mViewModel.getData("india")
+        mViewModel.getData(DEFAULT_COUNTRY)
             mViewModel.observeUnivLiveData().observe(this){
             universityAdapter.universityList =it
             universityAdapter.notifyDataSetChanged()
                 binding.progressBar.visibility = View.GONE
+                binding.serchview.isActivated = false
 
         }
+         binding.serchview.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+             override fun onQueryTextSubmit(query: String?): Boolean {
+                 query?.let {
+                     binding.progressBar.visibility = View.VISIBLE
+                     mViewModel.getData(it)
+
+                 }
+                 return true
+             }
+
+             override fun onQueryTextChange(newText: String?): Boolean {
+                 newText?.let {
+                 }
+                 return true
+             }
+         })
 
     }
 
