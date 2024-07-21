@@ -65,4 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+    interface ClickInterface{
+        public fun onItemClick(position:Int)
+    }
 }
