@@ -7,10 +7,10 @@ import com.dineshdk.universities.repository.Repository
 class ViewModel : ViewModel() {
 
     val repo = Repository()
-    fun getData(param:String) {
+    fun loadData(param:String) {
             repo.loadData(param)
     }
-    fun observeUnivLiveData() : LiveData<List<University>> {
+    fun getUnivLiveData() : LiveData<List<University>> {
         return repo.getData()
     }
 }

@@ -1,6 +1,5 @@
 package com.dineshdk.universities.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -8,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.dineshdk.universities.MainActivity
 import com.dineshdk.universities.databinding.RowItemBinding
 import com.dineshdk.universities.models.University
 
-class UniversityAdapter(val context: Context, var universityList: List<University>?)
+class UniversityAdapter(val clickListener: ItemClickListener, var universityList: List<University>?)
     : RecyclerView.Adapter<UniversityAdapter.UniversityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UniversityViewHolder {
@@ -34,25 +34,19 @@ class UniversityAdapter(val context: Context, var universityList: List<Universit
     }
 
 
-    inner class UniversityViewHolder(val binding:RowItemBinding):ViewHolder(binding.root),
-        View.OnClickListener {
-            var url:String? = null
+    inner class UniversityViewHolder(val binding:RowItemBinding):ViewHolder(binding.root) {
         fun bindData(univ : University){
             binding.apply {
                 name.text = univ?.name
                 tvAddress.text = "${univ?.stateProvince ?: ""} ${univ?.country}"
-                url = univ.webPages[0]
-                root.setOnClickListener(this@UniversityViewHolder)
-                imageButton.setOnClickListener(this@UniversityViewHolder)
+                root.setOnClickListener{
+                    clickListener.onItemClick(adapterPosition)
+                }
             }
         }
 
-        override fun onClick(p0: View?) {
-            if (!url?.startsWith("http://")!! && !url?.startsWith("https://")!!) {
-                url = "http://$url"
-            }
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(browserIntent)
-        }
+    }
+    public interface ItemClickListener{
+        public fun onItemClick(position:Int)
     }
 }

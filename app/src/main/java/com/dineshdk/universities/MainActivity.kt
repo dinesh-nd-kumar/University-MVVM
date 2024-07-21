@@ -1,5 +1,7 @@
 package com.dineshdk.universities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -12,7 +14,7 @@ import com.dineshdk.universities.databinding.ActivityMainBinding
 import com.dineshdk.universities.models.ViewModel
 import com.dineshdk.universities.others.Constant.DEFAULT_COUNTRY
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),UniversityAdapter.ItemClickListener {
 
     private lateinit var binding : ActivityMainBinding
     private lateinit var universityAdapter: UniversityAdapter
@@ -26,8 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel = ViewModelProvider(this).get(ViewModel::class.java)
         binding.progressBar.visibility = View.VISIBLE
-        mViewModel.getData(DEFAULT_COUNTRY)
-            mViewModel.observeUnivLiveData().observe(this){
+        mViewModel.loadData(DEFAULT_COUNTRY)
+            mViewModel.getUnivLiveData().observe(this){
             universityAdapter.universityList =it
             universityAdapter.notifyDataSetChanged()
                 binding.progressBar.visibility = View.GONE
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
              override fun onQueryTextSubmit(query: String?): Boolean {
                  query?.let {
                      binding.progressBar.visibility = View.VISIBLE
-                     mViewModel.getData(it)
+                     mViewModel.loadData(it)
 
                  }
                  return true
@@ -50,6 +52,15 @@ class MainActivity : AppCompatActivity() {
                  return true
              }
          })
+
+    }
+    override fun onItemClick(position:Int){
+        var url = mViewModel.getUnivLiveData().value?.get(position)?.webPages?.get(0)
+        if (!url?.startsWith("http://")!! && !url?.startsWith("https://")!!) {
+            url = "http://$url"
+        }
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
 
     }
 
@@ -65,7 +76,5 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-    interface ClickInterface{
-        public fun onItemClick(position:Int)
-    }
+
 }
