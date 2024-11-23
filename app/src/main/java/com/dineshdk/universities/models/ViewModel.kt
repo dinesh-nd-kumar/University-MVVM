@@ -6,7 +6,7 @@ import com.dineshdk.universities.repository.Repository
 
 class ViewModel : ViewModel() {
 
-    val repo = Repository()
+    private val repo = Repository()
     fun loadData(param:String) {
             repo.loadData(param)
     }
